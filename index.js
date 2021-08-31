@@ -1,8 +1,8 @@
 var Express = require('express');
-var mbs_service = require('./services/members')
-
+const mbs = require('./services/members')
+const rooms = require('./services/rooms')
 const app = Express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -11,13 +11,24 @@ app.use(function(req, res, next) {
 });
 
 app.get('/dashboard/members', async (req, res) => {
-let members = await mbs_service.membersStats;
+let members = await mbs.membersStats();
     res.json(members)
+})
+app.get('/members/list', async (req, res) => {
+    let members = await mbs.membersList();
+   // console.log(members)
+    res.json(members)
+})
+app.get('/rooms/list', async (req, res) => {
+    let roomsList = await rooms.loadRooms();
+
+    res.json(roomsList)
 })
 
 app.get('/user/:key', async (req, res) => {
-    console.log('Req for key: ', req.params)
 
+let userInfo = await mbs.memberInfo(req.params.key)
+res.json(userInfo)
 })
 app.listen(port, () => {
     console.log('Listening on port ', port)

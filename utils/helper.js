@@ -6,3 +6,21 @@ let countElementsWithKeyValue = async(array,key,value)=>{
         }
     }
 }
+
+  createKeyValueBasedArray = async (object) => {
+
+   await  (async function run(){
+        let output = [];
+        let entries =  Object.entries(object);
+     //   console.log(entries)
+         entries.map(value => {
+              output[value[0]] = value[1];
+          })
+        return output
+      })()
+
+
+}
+module.exports={
+    createKeyValueBasedArray
+}
